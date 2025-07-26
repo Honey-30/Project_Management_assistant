@@ -6,12 +6,6 @@ from sqlalchemy.sql import func
 import enum
 from database import Base
 
-class UserRole(enum.Enum):
-    ADMIN = "admin"
-    MANAGER = "manager"
-    MEMBER = "member"
-    VIEWER = "viewer"
-
 class ProjectStatus(enum.Enum):
     PLANNING = "planning"
     ACTIVE = "active"
@@ -43,6 +37,12 @@ class NotificationStatus(enum.Enum):
     READ = "read"
     ARCHIVED = "archived"
 
+class UserRole(enum.Enum):
+    ADMIN = "admin"
+    MANAGER = "manager"
+    MEMBER = "member"
+    VIEWER = "viewer"
+
 # User model
 class User(Base):
     __tablename__ = "users"
@@ -52,7 +52,7 @@ class User(Base):
     username = Column(String(100), unique=True, index=True, nullable=False)
     full_name = Column(String(255), nullable=False)
     hashed_password = Column(String(255), nullable=False)
-    role = Column(Enum(UserRole), default=UserRole.MEMBER, nullable=False)
+    role = Column(String(50), default="member", nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
     profile_picture = Column(String(255), nullable=True)
     bio = Column(Text, nullable=True)
@@ -73,7 +73,7 @@ class Project(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255), nullable=False, index=True)
     description = Column(Text, nullable=True)
-    status = Column(Enum(ProjectStatus), default=ProjectStatus.PLANNING, nullable=False)
+    status = Column(String(50), default="planning", nullable=False)
     start_date = Column(DateTime, nullable=True)
     end_date = Column(DateTime, nullable=True)
     deadline = Column(DateTime, nullable=True)
@@ -113,7 +113,7 @@ class TeamMember(Base):
     id = Column(Integer, primary_key=True, index=True)
     team_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    role = Column(Enum(UserRole), default=UserRole.MEMBER, nullable=False)
+    role = Column(String(50), default="member", nullable=False)
     joined_at = Column(DateTime, server_default=func.now(), nullable=False)
 
     # Relationships
@@ -127,8 +127,8 @@ class Task(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False, index=True)
     description = Column(Text, nullable=True)
-    status = Column(Enum(TaskStatus), default=TaskStatus.TODO, nullable=False)
-    priority = Column(Enum(TaskPriority), default=TaskPriority.MEDIUM, nullable=False)
+    status = Column(String(50), default="todo", nullable=False)
+    priority = Column(String(50), default="medium", nullable=False)
     start_date = Column(DateTime, nullable=True)
     due_date = Column(DateTime, nullable=True)
     estimated_hours = Column(Float, nullable=True)
@@ -185,7 +185,7 @@ class Notification(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     title = Column(String(255), nullable=False)
     message = Column(Text, nullable=False)
-    status = Column(Enum(NotificationStatus), default=NotificationStatus.UNREAD, nullable=False)
+    status = Column(String(50), default="unread", nullable=False)
     notification_type = Column(String(100), nullable=False)  # e.g., 'task_assigned', 'deadline_approaching'
     related_id = Column(Integer, nullable=True)  # ID of related entity (task, project, etc.)
     related_type = Column(String(100), nullable=True)  # Type of related entity
@@ -201,7 +201,7 @@ class Risk(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False)
     description = Column(Text, nullable=False)
-    level = Column(Enum(RiskLevel), nullable=False)
+    level = Column(String(50), nullable=False)
     probability = Column(Float, nullable=False)  # 0.0 to 1.0
     impact = Column(Float, nullable=False)  # 0.0 to 1.0
     mitigation_strategy = Column(Text, nullable=True)

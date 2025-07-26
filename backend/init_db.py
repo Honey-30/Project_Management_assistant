@@ -24,7 +24,7 @@ def create_demo_user(db: Session):
         username="admin",
         full_name="Demo Administrator",
         hashed_password=auth.get_password_hash("password"),
-        role=models.UserRole.ADMIN,
+        role="admin",
         is_active=True,
         bio="Demo administrator account for testing"
     )
@@ -40,7 +40,7 @@ def create_sample_data(db: Session, user: models.User):
     sample_project = models.Project(
         name="Website Redesign Project",
         description="Complete redesign of company website with modern UI/UX",
-        status=models.ProjectStatus.ACTIVE,
+        status="active",
         start_date=datetime.now(),
         deadline=datetime.now() + timedelta(days=90),
         budget=50000.0,
@@ -57,8 +57,8 @@ def create_sample_data(db: Session, user: models.User):
         {
             "title": "Design wireframes",
             "description": "Create wireframes for all main pages",
-            "status": models.TaskStatus.COMPLETED,
-            "priority": models.TaskPriority.HIGH,
+            "status": "completed",
+            "priority": "high",
             "progress": 100,
             "estimated_hours": 40.0,
             "actual_hours": 35.0,
@@ -67,8 +67,8 @@ def create_sample_data(db: Session, user: models.User):
         {
             "title": "Develop homepage",
             "description": "Implement responsive homepage design",
-            "status": models.TaskStatus.IN_PROGRESS,
-            "priority": models.TaskPriority.HIGH,
+            "status": "in_progress",
+            "priority": "high",
             "progress": 60,
             "estimated_hours": 60.0,
             "actual_hours": 30.0,
@@ -77,8 +77,8 @@ def create_sample_data(db: Session, user: models.User):
         {
             "title": "Content migration",
             "description": "Migrate existing content to new structure",
-            "status": models.TaskStatus.TODO,
-            "priority": models.TaskPriority.MEDIUM,
+            "status": "todo",
+            "priority": "medium",
             "progress": 0,
             "estimated_hours": 80.0,
             "actual_hours": 0.0,
@@ -87,8 +87,8 @@ def create_sample_data(db: Session, user: models.User):
         {
             "title": "Testing and QA",
             "description": "Comprehensive testing across all devices and browsers",
-            "status": models.TaskStatus.TODO,
-            "priority": models.TaskPriority.CRITICAL,
+            "status": "todo",
+            "priority": "critical",
             "progress": 0,
             "estimated_hours": 50.0,
             "actual_hours": 0.0,
@@ -118,7 +118,7 @@ def create_sample_data(db: Session, user: models.User):
     team_member = models.TeamMember(
         team_id=team.id,
         user_id=user.id,
-        role=models.UserRole.ADMIN
+        role="admin"
     )
     db.add(team_member)
     
@@ -128,13 +128,13 @@ def create_sample_data(db: Session, user: models.User):
             "title": "Welcome to Project Management Assistant",
             "message": "Your account has been set up successfully. Start by creating your first project!",
             "notification_type": "welcome",
-            "status": models.NotificationStatus.UNREAD
+            "status": "unread"
         },
         {
             "title": "Task deadline approaching",
             "message": "The task 'Develop homepage' is due in 7 days",
             "notification_type": "deadline_warning",
-            "status": models.NotificationStatus.UNREAD,
+            "status": "unread",
             "related_type": "task",
             "related_id": 2
         }
@@ -151,7 +151,7 @@ def create_sample_data(db: Session, user: models.User):
     risk = models.Risk(
         title="Scope Creep Risk",
         description="Risk of project scope expanding beyond original requirements",
-        level=models.RiskLevel.MEDIUM,
+        level="medium",
         probability=0.6,
         impact=0.7,
         mitigation_strategy="Regular stakeholder meetings and change request process",
